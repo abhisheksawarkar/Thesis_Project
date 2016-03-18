@@ -25,12 +25,14 @@ int button = 7; //button pin on protosnap
 int red = 3;
 int green = 5;
 int blue = 6;
+int buzzer = 2;
 
 int serial_switch = A0; //switch to turn on serial comm
 
 void setup(){
   Serial.begin(9600);
   pinMode(button, INPUT);
+  pinMode(buzzer, OUTPUT);
   pinMode(red, OUTPUT); 
   pinMode(green, OUTPUT); 
   pinMode(blue, OUTPUT); 
@@ -49,15 +51,15 @@ int mapped_value_acc;
 int mapped_value_magneto;
 int flag=0;
 int quad=1; //flag for 4th quadrant
-
+bool buzzer_flag = false;
 void loop(){       
 //  Serial.print(magneto_left);Serial.print('\t');
 //  Serial.print(magneto_right); Serial.print('\t');
 //  Serial.println(magneto_mean);
-
+//
 //Serial.print(magneto_left); Serial.print("\t");
 // Serial.print(magneto_right); Serial.print("\t");
-// Serial.print(smoothData2);Serial.print("\t");
+// Serial.print(rawData2);Serial.print("\t");
 // Serial.println(mapped_value_magneto);
  if(digitalRead(button)==LOW)
  {
@@ -70,6 +72,9 @@ void loop(){
 //    Serial.print(magneto_mean);
     delay(100);
     digital1.green_led_blink();
+    tone(buzzer,1000);
+    delay(500);
+    noTone(buzzer);
     flag++;
     break;
 
@@ -79,6 +84,9 @@ void loop(){
 //    Serial.print(magneto_left);
     delay(100);
     digital1.green_led_blink();
+    tone(buzzer,1000);
+    delay(500);
+    noTone(buzzer);
     flag++;
     break;
 
@@ -88,20 +96,29 @@ void loop(){
 //    Serial.print(magneto_right);
     delay(100);
     digital1.green_led_blink();
+    tone(buzzer,1000);
+    delay(500);
+    noTone(buzzer);
     flag++;
     break;
 
     case 3:
     acc_up = digital1.calib_acc();
-    delay(1000);
+    delay(100);
     digital1.green_led_blink();
+    tone(buzzer,1000);
+    delay(500);
+    noTone(buzzer);
     flag++;
     break;
 
     case 4:
     acc_down = digital1.calib_acc();
-    delay(1000);
+    delay(100);
     digital1.green_led_blink();
+    tone(buzzer,1000);
+    delay(500);
+    noTone(buzzer);
     flag++;
     break;
    }
@@ -145,13 +162,13 @@ if((magneto_left>260 && magneto_right<80) || (magneto_left>260 && magneto_right>
   { 
     rawData2 = 360 + rawData2;
     smoothData2 = digital2.digitalSmooth(rawData2, sensSmoothArray2);
-    mapped_value_magneto = map(smoothData2,magneto_left,magneto_right,10,170);
+    mapped_value_magneto = map(smoothData2,magneto_left,magneto_right,170,10);
     mapped_value_magneto = constrain(mapped_value_magneto,10,170);
     }
   else
   {
   smoothData2 = digital2.digitalSmooth(rawData2, sensSmoothArray2); 
-  mapped_value_magneto = map(smoothData2,magneto_left,magneto_right,10,170);
+  mapped_value_magneto = map(smoothData2,magneto_left,magneto_right,170,10);
   mapped_value_magneto = constrain(mapped_value_magneto,10,170);
   }
 }
@@ -160,7 +177,7 @@ else
 {
   //digital1.normal_working();
   smoothData2 = digital2.digitalSmooth(rawData2, sensSmoothArray2); 
-  mapped_value_magneto = map(smoothData2,magneto_left,magneto_right,10,170);
+  mapped_value_magneto = map(smoothData2,magneto_left,magneto_right,170,10);
   mapped_value_magneto = constrain(mapped_value_magneto,10,170);
 }
     smoothData1 = digital1.digitalSmooth(rawData1, sensSmoothArray1);  //Smooth acc values
@@ -178,6 +195,17 @@ else
 if(analogRead(serial_switch)==1023)
 {
 digital1.transmitting_led();
+if(buzzer_flag==true)
+{
+  for(int z =0;z<4;z++)
+  {
+    tone(buzzer,500);
+    delay(250);
+    noTone(buzzer);
+    delay(250);  
+   }
+  buzzer_flag=false;
+}
 Serial.println(acc_mag);
 delay(20);
 }
@@ -187,6 +215,8 @@ else
   digital1.violet_special();
   else
   digital1.normal_working();
+
+  buzzer_flag=true;
 }
 
 delay(100);
