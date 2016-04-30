@@ -1,0 +1,5 @@
+main.cpp is the source file which is used to detect a person carrying a gun in this project.
+This file uses OpenCV library and Caffe Deep Learning library to train and detect probable terrorist.
+The Caffe model uses bvlc_googlenet trained on ImageNet Database for assault rifle, gun detection.
+Person detection is done using face detection in opencv. Hog+SVM can be used but it requires graphic card for realtime performance.
+Multithreading is implemented in C++ for separating UI thread and caffe object detection thread.
