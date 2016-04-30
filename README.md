@@ -11,3 +11,7 @@ The sensor output values are in degrees(10-170) read to give it to pan-tilt mech
 2. Final_code_Receiver_on_UGV
 Arduino sketch to accept sensor values wirelessly over xbee network. 
 The sketch is burnt on Arduino mega mounted on a UGV which controls the pan-tilt mechanism as per the sensor values.
+
+3. My_VR_OpenCV
+OpenCV code to convert video from local storage or from IP webcam into VR SBS format. In this project, the VR goggle acts as HMD - head mount display for human controller.
+
