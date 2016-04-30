@@ -15,3 +15,5 @@ The sketch is burnt on Arduino mega mounted on a UGV which controls the pan-tilt
 3. My_VR_OpenCV
 OpenCV code to convert video from local storage or from IP webcam into VR SBS format. In this project, the VR goggle acts as HMD - head mount display for human controller.
 
+4. Terrorist_Detection
+It contains the main implementation of Deep learning using Convolutional Neural Network to detect terrorist in the video stream. Implemented using Opencv and Caffe Deep learning library.
